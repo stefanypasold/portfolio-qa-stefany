@@ -23,7 +23,7 @@ O aplicativo mobile foi desenvolvido em **React Native (Expo)**. A automação f
   * Validação de alertas nativos ao inserir credenciais inválidas.
 
 ### 🎥 Demonstração Visual
-![Demonstração do Maestro executando o fluxo de compras](./milks-cafe/docs/demo-maestro.gif)
+![Demonstração do Maestro executando o fluxo de compras](./milks-coffee/docs/demo-maestro.gif)
 
 ### 🛠️ Como executar localmente
 Para rodar a suíte E2E no seu emulador Android/iOS:
