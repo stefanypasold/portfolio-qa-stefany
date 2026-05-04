@@ -1,24 +1,20 @@
 class LoginPage {
-  acessar() {
-    cy.visit('/');
-  }
+    acessar() {
+        cy.visit('/'); 
+    }
 
-  preencherUsuario(usuario) {
-    cy.get('input[type="email"]').type(usuario);
-  }
+    preencherCredenciais(usuario, senha) {
+        cy.get('[data-cy="input-username"]').clear().type(usuario);
+        cy.get('[data-cy="input-password"]').clear().type(senha, { log: false });
+    }
 
-  preencherSenha(senha) {
-    cy.get('input[type="password"]').type(senha);
-  }
+    submeter() {
+        cy.get('[data-cy="btn-entrar"]').click();
+    }
 
-  clicarEntrar() {
-    cy.contains('button','Entrar no Sistema').click();
-  }
-
-  validarDashboard() {
-    cy.url().should('include', '/dashboard');
-    cy.contains('Dashboard').should('be.visible');
-  }
+    validarErro(mensagem) {
+        cy.get('[data-cy="msg-erro-login"]').should('be.visible').and('contain.text', mensagem);
+    }
 }
 
 export default new LoginPage();

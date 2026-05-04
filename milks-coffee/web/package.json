@@ -35,6 +35,7 @@
     "vite": "^8.0.4"
   },
   "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
     "stepDefinitions": "cypress/e2e/steps/**/*.js"
   }
 }

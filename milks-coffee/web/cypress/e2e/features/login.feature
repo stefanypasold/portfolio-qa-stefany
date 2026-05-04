@@ -1,11 +1,22 @@
-# language: pt
-Funcionalidade: Login no Painel Administrativo
-  Como um administrador da Milk's Coffee
-  Quero fazer login no sistema
-  Para gerenciar os pedidos e produtos
+Feature: Autenticação no Sistema
+  Como um usuário do sistema
+  Quero realizar login
+  Para acessar meu perfil adequado
 
-  Cenário: Login com credenciais válidas (Caminho Feliz)
-    Dado que eu acesso a página de login do painel
-    Quando eu preencho o campo usuário com "admin" e a senha com "admin123"
-    E clico no botão de entrar
-    Então eu devo ser redirecionado para o dashboard principal
+  Scenario: Caminho Triste - Login com credenciais inválidas
+    Given que eu acesso a página de login
+    When eu insiro o usuário "hacker" e a senha "senhaerrada"
+    And clico em entrar
+    Then eu devo ver a mensagem de erro "Usuário ou senha inválidos"
+
+  Scenario: Caminho Feliz - Login de Administrador
+    Given que eu acesso a página de login
+    When eu insiro o usuário "admin" e a senha "123"
+    And clico em entrar
+    Then eu devo ser redirecionado para o painel do PDV
+
+  Scenario: Caminho Feliz - Login de Cliente
+    Given que eu acesso a página de login
+    When eu insiro o usuário "stefany" e a senha "123456"
+    And clico em entrar
+    Then eu devo ser redirecionado para a vitrine da Loja
