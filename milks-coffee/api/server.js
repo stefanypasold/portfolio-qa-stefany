@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Middleware para LOG de monitoramento (ajuda muito no debug do mobile)
+// Log de requisições - Ótimo para o console da QA
 app.use((req, res, next) => {
     console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
     next();
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Config de Upload
+// Config de Upload do Multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, 'uploads/')),
     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
@@ -29,57 +29,62 @@ app.post('/api/login', (req, res) => {
     const username = req.body.username ? req.body.username.trim().toLowerCase() : '';
     const password = req.body.password ? req.body.password.toString().trim() : '';
 
-    console.log(`Tentativa de login: [${username}] com senha: [${password}]`);
-
     if (username === 'stefany' && password === '123456') {
-        console.log("Login de Stefany aprovado!");
         return res.json({ id: 99, username: 'stefany', role: 'customer' });
     }
-
     if (username === 'admin' && password === '123') {
-        console.log("Login de Admin aprovado!");
         return res.json({ id: 1, username: 'admin', role: 'admin' });
     }
-
     res.status(401).json({ message: "Usuário ou senha inválidos" });
 });
 
-// ROTA PARA O APP MOBILE (Vitrine)
-// Adicionada para resolver o erro 404 que o app estava dando
-app.get('/api/products', (req, res) => {
-    // Retorna apenas itens que tenham quantidade > 0 (opcional, mas recomendado)
-    db.all("SELECT * FROM estoque WHERE visivel_cliente = 1", [], (err, rows) => {
-        if (err) {
-            console.error("Erro ao buscar produtos:", err);
-            return res.status(500).json({ error: "Erro interno no banco" });
-        }
-        res.json(rows);
-    });
-});
-
-// CRUD ESTOQUE (Usado pelo Painel Web)
+// LISTAR PRODUTOS (Geral)
 app.get('/api/estoque', (req, res) => {
     db.all("SELECT * FROM estoque", [], (err, rows) => res.json(rows));
 });
 
-app.post('/api/estoque', upload.single('foto'), (req, res) => {
-    const { item, quantidade, preco, categoria, descricao, visivel_cliente } = req.body;
-    const img = req.file ? req.file.filename : 'default.png';
-    db.run(`INSERT INTO estoque (item, quantidade, preco, categoria, descricao, imagem_url, visivel_cliente) VALUES (?,?,?,?,?,?,?)`,
-        [item, quantidade, preco, categoria, descricao, img, visivel_cliente], function() {
-            res.json({ message: "Criado!", id: this.lastID });
-        });
+// LISTAR VENDAS
+app.get('/api/vendas', (req, res) => {
+    db.all("SELECT * FROM vendas ORDER BY id DESC", [], (err, rows) => res.json(rows));
 });
 
-app.put('/api/estoque/:id', upload.single('foto'), (req, res) => {
-    const { item, quantidade, preco, categoria, descricao, visivel_cliente } = req.body;
+// CADASTRAR PRODUTO (POST)
+app.post('/api/estoque', upload.single('imagem'), (req, res) => {
+    const { item, quantidade, preco, tipo } = req.body;
+    const img = req.file ? req.file.filename : 'default.png';
+
+    db.run(
+        `INSERT INTO estoque (item, quantidade, preco, imagem_url, visivel_cliente, tipo) VALUES (?,?,?,?,?,?)`,
+        [item, parseInt(quantidade) || 0, parseFloat(preco) || 0.0, img, 1, tipo || 'loja'], 
+        function(err) {
+            if (err) return res.status(500).json({ error: "Erro ao cadastrar produto" });
+            res.json({ message: "Criado com sucesso!", id: this.lastID, imagem_url: img });
+        }
+    );
+});
+
+// ATUALIZAR PRODUTO (PUT)
+app.put('/api/estoque/:id', upload.single('imagem'), (req, res) => {
+    const { item, quantidade, preco, tipo } = req.body;
     const id = req.params.id;
     const img = req.file ? req.file.filename : req.body.imagem_url;
 
-    db.run(`UPDATE estoque SET item=?, quantidade=?, preco=?, categoria=?, descricao=?, visivel_cliente=?, imagem_url=? WHERE id=?`,
-        [item, quantidade, preco, categoria, descricao, visivel_cliente, img, id], () => {
-            res.json({ message: "Atualizado!" });
-        });
+    db.run(
+        `UPDATE estoque SET item=?, quantidade=?, preco=?, imagem_url=?, tipo=? WHERE id=?`,
+        [item, parseInt(quantidade) || 0, parseFloat(preco) || 0.0, img, tipo || 'loja', id], 
+        function(err) {
+            if (err) return res.status(500).json({ error: "Erro ao atualizar" });
+            res.json({ message: "Atualizado com sucesso!" });
+        }
+    );
+});
+
+// EXCLUIR PRODUTO (DELETE) - Essencial para o fluxo de limpeza (Teardown) do Cypress
+app.delete('/api/estoque/:id', (req, res) => {
+    db.run("DELETE FROM estoque WHERE id = ?", [req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: "Erro ao excluir" });
+        res.json({ message: "Excluído com sucesso!" });
+    });
 });
 
 // FINALIZAR VENDA
@@ -94,4 +99,4 @@ app.post('/api/vendas', (req, res) => {
     });
 });
 
-app.listen(3001, () => console.log("🚀 Servidor Full-Stack Milk's Coffee na porta 3001"));
+app.listen(3001, () => console.log("🚀 Servidor da QA rodando na porta 3001"));
