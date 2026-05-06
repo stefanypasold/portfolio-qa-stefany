@@ -1,37 +1,33 @@
-# 🐶☕ Milk's Coffee - Full-Stack QA Automation Project
+# ☕ Milk's Coffee - Arquitetura de Qualidade (QA)
+![Milk's Coffee](./milks-coffee/docs/logo-milks.png)
 
-Este é um projeto prático de portfólio focado na Garantia de Qualidade (QA). Desenvolvi do zero um sistema completo de PDV e E-commerce simulado (Front-end e Back-end) para criar um ecossistema real e robusto, permitindo a aplicação de testes End-to-End avançados.
+Este repositório contém o ecossistema completo do **Milk's Coffee**, um projeto desenvolvido e automatizado do zero com o objetivo de aplicar arquiteturas de testes e garantir a qualidade de ponta a ponta (E2E).
+
+A aplicação simula um e-commerce de cafeteria e está dividida em duas frentes principais, cada uma com sua própria suíte de automação baseada em boas práticas de mercado, como mapeamento resiliente de elementos e independência de estado.
+
+---
+
+## 🏗️ Estrutura do Monorepo
+O projeto está dividido em dois módulos independentes:
+
+O projeto está dividido em dois módulos independentes:
+
+* **📱 Módulo Mobile (App do Cliente):** Desenvolvido em React Native (Expo). A automação E2E foi construída com **Maestro**, focada em fluxos nativos, performance de execução e validação de interface fluida.
+* **💻 Módulo Web (Painel Admin):** Aplicação web focada na gestão do e-commerce. A automação foi estruturada utilizando **Cypress**, aplicando o padrão Page Object Model (POM) para alta escalabilidade e fácil manutenção.
+
+---
+
+## 🔗 Documentação Técnica
+
+Para ver os vídeos de execução e instruções de como rodar cada automação na sua máquina, acesse a documentação específica de cada módulo:
+
+* ➡️ [Acessar a documentação de Testes Mobile (Maestro)](./mobile/README.md)
+* ➡️ [Acessar a documentação de Testes Web (Cypress)](./web/README.md)
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
-* **Aplicação:** React.js, Node.js (Express), SQLite.
-* **Automação de Testes:** Cypress integrado com **Cucumber (BDD)**.
 
-## 🎯 Arquitetura de Testes e Boas Práticas
-A automação foi estruturada visando legibilidade, manutenibilidade e resiliência:
-- **Behavior Driven Development (BDD):** Cenários escritos em Gherkin (`.feature`) garantindo fácil leitura e alinhamento com regras de negócio.
-- **Page Object Model (POM):** Isolamento de mapeamentos de elementos e métodos de ação.
-- **Data-Cy Attributes:** Utilização exclusiva do atributo `data-cy` no código-fonte, garantindo que os testes não quebrem com mudanças visuais de CSS.
-- **Cenários Independentes (Setup & Teardown):** O fluxo de cadastro do Admin sempre exclui o próprio dado de teste gerado, mantendo o banco de dados limpo.
-
-## 🚀 Como Executar o Projeto
-
-**1. Iniciando o Back-end (API)**
-```bash
-cd api
-npm install
-npm run dev
-```
-
-**2. Iniciando o Front-end (Web)**
-
-```bash
-cd web
-npm install
-npm start
-```
-
-**3. Executando a Automação (Cypress + Cucumber)**
-
-```bash
-npx cypress open
-```
+* **Mobile:** React Native, Expo, Maestro.
+* **Web:** Cypress, Node.js, Cucumber/BDD.
+* **Padrões de Projeto:** Page Object Model (POM), Data-Driven Testing.
