@@ -1,7 +1,5 @@
 # 💻 Automação Web | Milk's Coffee (Cypress)
 
-![Logo](../docs/logo-milks.png)
-
 Este módulo é dedicado à garantia de qualidade do painel administrativo (Web) do Milk's Coffee. A suíte foi desenvolvida em **Cypress**, implementando o padrão arquitetural **Page Object Model (POM)** aliado à escrita de cenários em **BDD (Behavior-Driven Development)**.
 
 ---
