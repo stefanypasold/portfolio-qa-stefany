@@ -21,7 +21,7 @@ Este módulo contém a suíte de testes End-to-End (E2E) para o aplicativo mobil
 
 ## 🎥 Demonstração Visual
 
-![Demonstração do Maestro executando o fluxo de compras](./milks-coffee/docs/demo-maestro.gif)
+![Demonstração do Maestro executando o fluxo de compras](../docs/demo-maestro.gif)
 
 ---
 
