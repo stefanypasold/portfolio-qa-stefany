@@ -1,0 +1,22 @@
+appId: host.exp.exponent
+---
+# 1. Se ficou preso no Checkout, tenta voltar pro Carrinho
+- tapOn:
+    id: "back-to-cart-btn"
+    optional: true
+
+# 2. Se ficou preso no Carrinho, tenta voltar pra Vitrine
+- tapOn:
+    id: "back-to-vitrine-btn"
+    optional: true
+
+# 3. Se terminou a compra e está na Nota Fiscal, tenta voltar pra Vitrine
+- tapOn:
+    id: "new-purchase-btn"
+    optional: true
+
+# 4. Garante que chegou na vitrine e faz o logout
+- assertVisible:
+    id: "vitrine-title"
+- tapOn:
+    id: "logout-btn"

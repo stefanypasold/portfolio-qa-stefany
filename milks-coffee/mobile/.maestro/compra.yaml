@@ -1,0 +1,66 @@
+appId: host.exp.exponent
+
+# 1. VARIÁVEIS DO TESTE 
+env:
+  USUARIO: "stefany"
+  SENHA: "123456"
+  NOME_COMPRADOR: "Joao da Silva"
+  CEP_ENTREGA: "89200000"
+
+# 2. GATILHO DE LIMPEZA 
+onFlowComplete:
+  - runFlow: teardown.yaml
+
+---
+
+- tapOn:
+    text: "Portfolio QA" 
+    optional: true
+
+# 3. FAZ O LOGIN USANDO AS VARIÁVEIS
+- assertVisible:
+    id: "login-title"
+- tapOn:
+    id: "login-username"
+- inputText: ${USUARIO}
+- tapOn:
+    id: "login-password"
+- inputText: ${SENHA}
+- tapOn:
+    id: "login-submit"
+
+# 4. ADICIONA PRODUTO NA VITRINE
+- assertVisible:
+    id: "vitrine-title"
+- tapOn: "Adicionar" 
+- assertVisible: "Sucesso" 
+- tapOn: "OK" 
+- tapOn:
+    id: "go-to-cart-btn"
+
+# 5. VALIDA O CARRINHO E AVANÇA
+- assertVisible:
+    id: "cart-title"
+- tapOn:
+    id: "checkout-btn"
+
+# 6. PREENCHE O CHECKOUT USANDO VARIÁVEIS
+- assertVisible: "Finalizar Compra"
+- tapOn:
+    id: "input-nome"
+- inputText: ${NOME_COMPRADOR}
+- tapOn:
+    id: "input-cep"
+- inputText: ${CEP_ENTREGA}
+- hideKeyboard
+- tapOn:
+    id: "pay-method-PIX"
+- tapOn:
+    id: "finish-purchase-btn"
+
+# 7. VALIDA A NOTA FISCAL USANDO VARIÁVEL
+- assertVisible:
+    id: "receipt-title"
+- assertVisible: "Cliente: ${NOME_COMPRADOR}"
+- assertVisible: "Pagamento: PIX"
+

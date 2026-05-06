@@ -1,0 +1,28 @@
+appId: host.exp.exponent
+---
+
+- tapOn:
+    text: "Portfolio QA" 
+    optional: true
+
+# Valida se estamos na tela certa antes de começar
+- assertVisible:
+    id: "login-title"
+
+# Preenche o usuário
+- tapOn:
+    id: "login-username"
+- inputText: "stefany"
+
+# Preenche a senha
+- tapOn:
+    id: "login-password"
+- inputText: "123456"
+
+# Clica no botão de entrar
+- tapOn:
+    id: "login-submit"
+
+# Valida se o login deu certo checando se a vitrine carregou
+- assertVisible:
+    id: "vitrine-title"

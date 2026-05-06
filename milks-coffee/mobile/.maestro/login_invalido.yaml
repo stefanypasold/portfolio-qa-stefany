@@ -1,0 +1,39 @@
+appId: host.exp.exponent
+---
+
+- tapOn:
+    text: "Portfolio QA" 
+    optional: true
+
+# Garante que estamos no Login
+- extendedWaitUntil:
+    visible:
+      id: "login-title"
+    timeout: 15000 # Dá até 15 segundos para o Expo carregar o app
+
+# Preenche usuário certo, mas senha errada
+- tapOn:
+    id: "login-username"
+- inputText: "stefany"
+- tapOn:
+    id: "login-password"
+- inputText: "senhaerrada123"
+
+# Tenta entrar
+- tapOn:
+    id: "login-submit"
+
+# VALIDAÇÃO DO CAMINHO TRISTE:
+# O app tem que mostrar um alerta de Erro
+- assertVisible: "Erro"
+- assertVisible: "Usuário ou senha inválidos"
+- tapOn: "OK" # Fecha o alerta para o app não ficar travado
+
+# LIMPEZA DOS CAMPOS 
+- tapOn:
+    id: "login-username" 
+- eraseText: 15          
+
+- tapOn:
+    id: "login-password" 
+- eraseText: 15
